@@ -33,7 +33,7 @@ def find_available_number(start=1, zeros=zeros_default, fmt='{:0{zeros}d}',
     try:
         newnr = len(Files(min_digits=zeros, recursive=recursive).files())
     except ValueError:
-        newnr == 0
+        newnr = 0
 
     if newnr == 0:
         return fmt.format(start, zeros=zeros)
@@ -54,7 +54,7 @@ def find_files(directory, pattern):
                 yield filename
 
 
-def files(directory='.', recursive=True, ignore=['*.svg']):
+def files(directory='.', recursive=True, ignore=None):
     return Files(directory=directory, recursive=recursive, ignore=ignore
                  ).files()
 
@@ -77,11 +77,11 @@ class Files(object):
     recursive: walk through all sub directories
     ignore: list of glob_pattern of files that should be ignored
     min_digits - max_digits: minimum and maxium digits in front of filename '''
-    def __init__(self, directory='.', recursive=True, ignore=['*.svg'],
+    def __init__(self, directory='.', recursive=True, ignore=None,
                  min_digits=2, max_digits=4, filename_spec='\d{%i,%i}_'):
         self.directory = directory
         self.recursive = recursive
-        self.ignore = ignore
+        self.ignore = [] if ignore is None else ignore
         self.min_digits = min_digits
         self.max_digits = max_digits
         self.filename_spec = filename_spec
